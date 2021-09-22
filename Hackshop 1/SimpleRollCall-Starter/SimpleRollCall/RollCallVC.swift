@@ -66,21 +66,22 @@ class RollCallVC: UIViewController {
         //
         // Note that you can't just say button.image = something because
         // a button can have different states.
-        // MARK: >> Your Code Here <<
+        button.setImage(UIImage(systemName:"xmark"), for: .normal)
         
         // Create a symbol configuration to customize the appearance of our symbol image.
         // The procedure is described in this article:
         // https://developer.apple.com/documentation/uikit/uiimage/configuring_and_displaying_symbol_images_in_your_ui
         // MARK: >> Your Code Here <<
-        
+        let config = UIImage.SymbolConfiguration(pointSize: 22, weight: .medium)
+        button.setPreferredSymbolConfiguration(config, forImageIn: .normal)
         // This changes the color of the image
         // MARK: >> Your Code Here <<
-        
+        button.tintColor = .white
         // Set the background color
         // What's the different between .red and .systemRed?
         // Try typing them out and hovering on it while holding option(⌥)
         // MARK: >> Your Code Here <<
-        
+        button.backgroundColor = .systemRed
         // Because we want to bind both buttons to the same @objc callback, we will use tag to
         // identify which button is tapped.
         button.tag = 1
@@ -95,6 +96,11 @@ class RollCallVC: UIViewController {
         let button = UIButton()
         
         // MARK: >> Your Code Here <<
+        button.setImage(UIImage(systemName:"checkmark"), for: .normal)
+        let config = UIImage.SymbolConfiguration(pointSize: 22, weight: .medium)
+        button.setPreferredSymbolConfiguration(config, forImageIn: .normal)
+        button.tintColor = .white
+        button.backgroundColor = .systemGreen
         
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -110,7 +116,9 @@ class RollCallVC: UIViewController {
         
         // Add the components into view hierarchy
 
-        // MARK: >> Your Code Here <<
+        view.addSubview(nameLabel)
+        view.addSubview(presentButton)
+        view.addSubview(absentButton)
         
         // Now it should look like this
         // -------view hierarchy--------
@@ -148,6 +156,18 @@ class RollCallVC: UIViewController {
         // y
         NSLayoutConstraint.activate([
             // MARK: >> Your Code Here <<
+            view.topAnchor.constraint(equalTo: nameLabel.topAnchor, constant: -200),
+            view.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor, constant: -50),
+            view.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 50),
+            
+            nameLabel.bottomAnchor.constraint(equalTo: presentButton.topAnchor, constant: -300),
+            presentButton.leadingAnchor.constraint(equalTo: presentButton.leadingAnchor, constant: 80),
+            presentButton.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -60),
+            presentButton.widthAnchor.constraint(equalTo: presentButton.heightAnchor),
+            absentButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -80),
+            view.centerXAnchor.constraint(equalTo: absentButton.leadingAnchor, constant: -60),
+            absentButton.widthAnchor.constraint(equalTo: absentButton.heightAnchor),
+            absentButton.centerYAnchor.constraint(equalTo: presentButton.centerYAnchor)
         ])
         
         // Bind the @objc function to the button's touchUpInside event. Touch up inside means
@@ -163,6 +183,7 @@ class RollCallVC: UIViewController {
         super.viewWillAppear(animated)
         
         // MARK: >> Your Code Here <<
+        
     }
     
     // As the name says, called after subviews finish the layout.
@@ -170,12 +191,14 @@ class RollCallVC: UIViewController {
         super.viewDidLayoutSubviews()
         
         // A little trick that makes the button round.
-        //
         // We can't do this in viewDidLoad because at the time we were just setting up
         // the constraints, and the buttons haven't been layouted yet. So
         // `button.frame.width` wouldn't reflect the actual width of the view
         // (it's actually gonna be .zero again).
-        // MARK: >> Your Code Here <<
+        presentButton.layer.cornerRadius = presentButton.bounds.width/2
+        absentButton.layer.cornerRadius = absentButton.bounds.width/2
+        presentButton.clipsToBounds = true
+        absentButton.clipsToBounds = true
     }
     
     @objc func didTapButton(_ sender: UIButton) {
