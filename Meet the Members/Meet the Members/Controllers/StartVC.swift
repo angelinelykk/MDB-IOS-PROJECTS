@@ -25,7 +25,7 @@ class StartVC: UIViewController {
         // == UIColor.darkGray
         label.textColor = .darkGray
         
-        label.text = "Meet the Member"
+        label.text = "Meet the Members"
         
         // == NSTextAlignment(expected type).center
         label.textAlignment = .center
@@ -44,7 +44,7 @@ class StartVC: UIViewController {
         
         button.setTitle("Start", for: .normal)
         
-        button.setTitleColor(.blue, for: .normal)
+        button.setTitleColor(.white, for: .normal)
         
         // MARK: STEP 1: UIButton Customization
         // Action Items:
@@ -57,6 +57,8 @@ class StartVC: UIViewController {
         // where you will find all the available APIs.
         
         // MARK: >> Your Code Here <<
+        button.tintColor = .white
+        button.backgroundColor = .systemGreen
         
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -85,7 +87,7 @@ class StartVC: UIViewController {
         // - Constraints can only be created in the same view hierarchy.
         //   So you have to add the view subview before creating constraints.
         view.addSubview(welcomeLabel)
-        
+    
         
         // And add the constraints
         // (0, 0)
@@ -98,6 +100,7 @@ class StartVC: UIViewController {
         // |
         // y
         //
+        
         NSLayoutConstraint.activate([
             // You can use the view.topAnchor. But it's different, why?
             // https://developer.apple.com/documentation/uikit/uiview/positioning_content_relative_to_the_safe_area
@@ -108,13 +111,21 @@ class StartVC: UIViewController {
             welcomeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
             
             //     welcomeLabel.trailingAnchor = view.trailingAnchor - 50
-            welcomeLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50)
+            welcomeLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
+            
+            
         ])
         
-        // MARK: >> Your Code Here <<
-        
+        view.addSubview(startButton)
         NSLayoutConstraint.activate([
             // MARK: >> Your Code Here <<
+            startButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 200),
+            
+            // For your understanding, here's what it's saying:
+            //     welcomeLabel.leadingAnchor = view.leadingAnchor + 50
+            startButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
+            
+            startButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
         ])
         
         
