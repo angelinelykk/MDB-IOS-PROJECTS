@@ -80,17 +80,17 @@ class StatsVC: UIViewController {
         label.textColor = .darkGray
         
         if MainVC.answers.count >= 3 {
-            label.text = "Past 3 Results: \n\n" + MainVC.answers.reversed()[0] + ", " + MainVC.answers.reversed()[1] + ", " + MainVC.answers.reversed()[2]
+            label.text = "Past 3 Results \n\n (Most recent to least) \n\n" + MainVC.answers.reversed()[0] + ", " + MainVC.answers.reversed()[1] + ", " + MainVC.answers.reversed()[2]
         }
         if MainVC.answers.count == 2 {
-            label.text = "Past 3 Results: \n\n" + MainVC.answers.reversed()[0] + ", " + MainVC.answers.reversed()[1]
+            label.text = "Past 3 Results \n\n (Most recent to least) \n\n" + MainVC.answers.reversed()[0] + ", " + MainVC.answers.reversed()[1]
         }
         if MainVC.answers.count == 1 {
-            label.text = "Past 3 Results: \n\n" + MainVC.answers.reversed()[0]
+            label.text = "Past 3 Results \n\n (Most recent to least) \n\n" + MainVC.answers.reversed()[0]
         }
         
         if MainVC.answers.count == 0 {
-            label.text = "Past 3 Results: "
+            label.text = "Past 3 Results \n\n (Most recent to least) \n\n"
         }
         
         // == NSTextAlignment(expected type).center

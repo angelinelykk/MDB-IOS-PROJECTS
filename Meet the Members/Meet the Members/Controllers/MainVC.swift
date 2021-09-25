@@ -14,6 +14,8 @@ class MainVC: UIViewController {
     
     static var score = 0
     
+    var stats = false
+    
     static var longestStreak = 0
     
     static var currentStreak = 0
@@ -28,7 +30,7 @@ class MainVC: UIViewController {
     
     static var correctButtonTag = 0
     
-    var timer: Timer?
+    static var timer: Timer?
     
     static var count = 0
     
@@ -149,7 +151,7 @@ class MainVC: UIViewController {
         view.backgroundColor = .white
         
         // Create a timer that calls timerCallback() every one second
-        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
+        MainVC.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
         
         // MARK: STEP 6: Adding Subviews and Constraints
         // Action Items:
@@ -320,8 +322,11 @@ class MainVC: UIViewController {
         // - Reinstantiate timer when view appears
         
         // MARK: >> Your Code Here <<
-        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
         
+        if stats == true {
+            stats = false
+            MainVC.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
+        }
     }
     
     func getNextQuestion() {
@@ -370,18 +375,25 @@ class MainVC: UIViewController {
     // - You can use `sender.tag` to identify which button is pressed.
     @objc func timerCallback() {
         scoreLabel.text = "Score: " + String(MainVC.score)
-        MainVC.count += 1
         for button in buttons {
             if (button.titleLabel!.text == MainVC.answer) {
                 MainVC.correctButtonTag = button.tag
             }
         }
         if MainVC.count >= 5 {
+            for button in buttons {
+                if (button.titleLabel!.text) == MainVC.answer {
+                    button.backgroundColor = .systemGreen
+                    MainVC.correctButtonTag = button.tag
+                }
+            }
+            
+            
             buttons[MainVC.correctButtonTag].backgroundColor = .systemGreen
             if MainVC.count == 7 {
-                buttons[MainVC.correctButtonTag].backgroundColor = .systemMint
                 MainVC.currentStreak = 0
                 MainVC.count = 0
+                buttons[MainVC.correctButtonTag].backgroundColor = .systemMint
                 MainVC.answers.append("Wrong")
                 getNextQuestion()
             }
@@ -396,17 +408,34 @@ class MainVC: UIViewController {
                 getNextQuestion()
             }
         }
+        MainVC.count += 1
     }
     
     @objc func didTapAnswer(_ sender: UIButton) {
         MainVC.pressedButton = true
         MainVC.pressed = sender.tag
-        for button in buttons {
-            if buttons[MainVC.pressed].titleLabel!.text == MainVC.answer {
-                MainVC.correctButtonTag = button.tag
+        MainVC.count = 0
+        
+        if buttons[sender.tag].titleLabel!.text == MainVC.answer {
+            MainVC.score += 1
+            MainVC.currentStreak += 1
+            MainVC.answers.append("Correct")
+            if MainVC.currentStreak > MainVC.longestStreak {
+                MainVC.longestStreak = MainVC.currentStreak
+            }
+            buttons[MainVC.pressed].backgroundColor = .systemGreen
+        } else {
+            buttons[MainVC.pressed].backgroundColor = .systemRed
+            MainVC.answers.append("Wrong")
+            MainVC.currentStreak = 0
+            for button in buttons {
+                if button.titleLabel!.text == MainVC.answer {
+                    button.backgroundColor = .systemGreen
+                    MainVC.correctButtonTag = button.tag
+                }
             }
         }
-        if buttons[MainVC.pressed].tag == MainVC.correctButtonTag {
+        /**if buttons[MainVC.pressed].tag == MainVC.correctButtonTag {
             MainVC.score += 1
             MainVC.currentStreak += 1
             MainVC.answers.append("Correct")
@@ -419,15 +448,16 @@ class MainVC: UIViewController {
             buttons[MainVC.pressed].backgroundColor = .systemRed
             buttons[MainVC.correctButtonTag].backgroundColor = .systemGreen
             MainVC.currentStreak = 0
-        }
-        MainVC.count = 0
+        }*/
     }
     
     @objc func didTapStats(_ sender: UIButton) {
         MainVC.paused = true
-        timer?.invalidate()
+        stats = true
+        MainVC.timer?.invalidate()
+        MainVC.timer = nil
         let vc = StatsVC(game: self)
-        //vc.modalPresentationStyle = .fullScreen
+        vc.modalPresentationStyle = .fullScreen
         
         // MARK: STEP 11: Going to StatsVC
         // When we are navigating between VCs (e.g MainVC -> StatsVC),
@@ -464,10 +494,10 @@ class MainVC: UIViewController {
         // - Update the call site here on line 139
         if MainVC.paused == false {
             MainVC.paused = true
-            timer?.invalidate()
+            MainVC.timer?.invalidate()
             pauseResumeButton.setTitle("Resume", for: .normal)
         } else {
-            timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
+            MainVC.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
             pauseResumeButton.setTitle("Pause", for: .normal)
             MainVC.score = 0
             MainVC.paused = false
