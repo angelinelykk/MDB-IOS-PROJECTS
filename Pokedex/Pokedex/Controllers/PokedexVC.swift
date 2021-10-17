@@ -8,12 +8,46 @@
 import UIKit
 
 class PokedexVC: UIViewController {
-    
-    let pokemons = PokemonGenerator.shared.getPokemonArray()
+
+    private let welcomeLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.text = "Pokedex"
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 80, weight: UIFont.Weight.bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        view.backgroundColor = .systemIndigo
+        
+        //add welcome label to welcome page
+        
+        view.addSubview(welcomeLabel)
+        NSLayoutConstraint.activate([
+        
+            welcomeLabel.topAnchor.constraint(equalTo: view.topAnchor),
+            welcomeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+        ])
     }
+    
+    override func viewDidAppear(_ animated: Bool)
+    {
+        UIView.animate(withDuration: 3.0, animations: {self.welcomeLabel.center.y += self.view.bounds.height/8*3}, completion: {(finished: Bool) in
+            self.moveToIntro()
+        })
+    }
+    
+    func moveToIntro() {
+        let vc = UINavigationController(rootViewController: IntroductionVC())
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true, completion: nil)
+        
+        
+    }
+    
 }
 
