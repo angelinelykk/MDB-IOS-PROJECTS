@@ -9,8 +9,10 @@ import UIKit
 
 
 class IntroductionVC: UIViewController, UISearchResultsUpdating {
+    
+    var displayResults: Bool = false
     //array of dictionaries: data source
-    let pokemons = PokemonGenerator.shared.getPokemonArray()
+    var pokemons = PokemonGenerator.shared.getPokemonArray()
     let searchController = UISearchController(searchResultsController: ResultsVC())
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -29,6 +31,17 @@ class IntroductionVC: UIViewController, UISearchResultsUpdating {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    let returnFilterButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Return to Filter", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = .systemOrange
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,14 +66,32 @@ class IntroductionVC: UIViewController, UISearchResultsUpdating {
         collectionView.dataSource = self
         collectionView.delegate = self
         
+        if !displayResults {
         view.addSubview(filterButton)
         NSLayoutConstraint.activate([
             filterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             filterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
+            
         
-        filterButton.addTarget(self, action: #selector(didTapFilter(_:)), for: .touchUpInside)
+        }
         
+        if displayResults {
+            view.addSubview(returnFilterButton)
+            NSLayoutConstraint.activate([
+                returnFilterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                returnFilterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            ])
+        }
+        
+        if !displayResults {
+            filterButton.addTarget(self, action: #selector(didTapFilter(_:)), for: .touchUpInside)
+
+        }
+        
+        if displayResults {
+            returnFilterButton.addTarget(self, action: #selector(didTapFilterReturn(_:)), for: .touchUpInside)
+        }
     }
     
     //search bar implemented
@@ -96,6 +127,10 @@ class IntroductionVC: UIViewController, UISearchResultsUpdating {
         let vc = FilterVC()
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true, completion: nil)
+    }
+    
+    @objc func didTapFilterReturn(_ sender: UIButton) {
+        dismiss(animated: true, completion: nil)
     }
 }
 
