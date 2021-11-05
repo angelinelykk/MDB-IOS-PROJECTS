@@ -167,16 +167,28 @@ class SigninVC: UIViewController {
                 case .userNotFound:
                     self.showErrorBanner(withTitle: "User not found", subtitle: "Please provide an email")
                 case .wrongPassword:
-                    self.showErrorBanner(withTitle: "User not found", subtitle: "Please provide an email")
+                    self.showErrorBanner(withTitle: "Wrong password", subtitle: "Please retype password")
+                case .internalError:
+                    self.showErrorBanner(withTitle: "Internal error", subtitle: "Please reload application")
+                case .invalidEmail:
+                    self.showErrorBanner(withTitle: "Invalid email", subtitle: "Please retype email")
+                case .errorFetchingUserDoc:
+                    self.showErrorBanner(withTitle: "Error fetching user information", subtitle: "Please reload application")
+                case .errorDecodingUserDoc:
+                    self.showErrorBanner(withTitle: "Error loading user information", subtitle: "Please reload application")
+                case .unspecified:
+                    self.showErrorBanner(withTitle: "Error", subtitle: "Error occurred")
                 default:
-                    self.showErrorBanner(withTitle: "User not found", subtitle: "Please provide an email")
+                    self.showErrorBanner(withTitle: "Error", subtitle: "Error occurred")
                 }
             }
         }
     }
     
     @objc private func didTapSignUp(_ sender: UIButton) {
-        
+        let vc = SignupVC()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true, completion: nil)
     }
     
     private func showErrorBanner(withTitle title: String, subtitle: String? = nil) {

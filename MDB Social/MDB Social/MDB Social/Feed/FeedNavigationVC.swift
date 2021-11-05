@@ -8,11 +8,11 @@
 import UIKit
 
 class FeedNavigationVC: UINavigationController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+    
+    override open func viewDidLoad() {
+            super.viewDidLoad()
     }
 
+    
 }
+
