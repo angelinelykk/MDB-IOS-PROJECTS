@@ -6,11 +6,10 @@ class FeedVC: UIViewController {
     var events: [SOCEvent] = []
     
     private let signOutButton: UIButton = {
-        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 20))
+        let btn = UIButton()
         btn.backgroundColor = .primary
         btn.setTitle("Sign Out", for: .normal)
-        let config = UIImage.SymbolConfiguration(font: .systemFont(ofSize: 30, weight: .medium))
-        btn.setPreferredSymbolConfiguration(config, forImageIn: .normal)
+        btn.translatesAutoresizingMaskIntoConstraints = false
         btn.tintColor = .white
         
         return btn
@@ -29,7 +28,10 @@ class FeedVC: UIViewController {
         
         view.backgroundColor = .black
         
-        events = FIRDatabaseRequest.shared.getEvents()
+        FIRDatabaseRequest.shared.getEvents(completion: { eventsCollection in
+            self.events = eventsCollection
+            self.collectionView.reloadData()
+        })
         
         //signOutButton
         print(events)
@@ -80,7 +82,10 @@ extension FeedVC: UICollectionViewDataSource {
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: eventCell.reuseIdentifier, for: indexPath) as! eventCell
-        cell.name = events[indexPath.item].name
+        let currentEvent = events[indexPath.item]
+        FIRDatabaseRequest.shared.getUser(uid: currentEvent.creator, completion: {user in cell.creator = "Creator: " + user.fullname})
+        cell.url = URL(string: events[indexPath.item].photoURL)
+        cell.name = "Event: " + currentEvent.name  +  "\n RSVP: " +  String(currentEvent.rsvpUsers.count)
         return cell
     }
 }

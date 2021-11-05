@@ -33,9 +33,32 @@ class FIRDatabaseRequest {
         } catch { }
     }
     
+    func getUser(uid: String, completion: @escaping ((SOCUser)->())) {
+        let docRef = db.collection("users").document(uid)
+        docRef.getDocument { (document, error) in
+            let result = Result {
+                  try document?.data(as: SOCUser.self)
+            }
+            switch result {
+                case .success(let user):
+                    if let user = user {
+                        // A `City` value was successfully initialized from the DocumentSnapshot.
+                        completion(user)
+                    } else {
+                        // A nil value was successfully initialized from the DocumentSnapshot,
+                        // or the DocumentSnapshot was nil.
+                        print("Document does not exist")
+                    }
+                case .failure(let error):
+                    // A `City` value could not be initialized from the DocumentSnapshot.
+                    print("Error decoding user: \(error)")
+                }
+        }
+    }
+    
     /* TODO: Events getter */
     
-    func getEvents() -> [SOCEvent] {
+    func getEvents(completion: @escaping (([SOCEvent])->())) {
         var events: [SOCEvent] = []
         let snapshot = db.collection("events").getDocuments() {
             (querySnapshot, err) in
@@ -58,8 +81,13 @@ class FIRDatabaseRequest {
                         print("Error decoding event: \(error)")
                     }
                 }
+                completion(self.sortEvents(events: events))
             }
         }
-        return events
+    }
+    
+    private func sortEvents(events: [SOCEvent]) -> [SOCEvent] {
+        var sortedDate = events.sorted { $0.startDate >= $1.startDate}
+        return sortedDate
     }
 }
