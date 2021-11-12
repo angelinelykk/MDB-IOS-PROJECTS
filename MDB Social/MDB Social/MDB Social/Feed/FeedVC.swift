@@ -1,5 +1,10 @@
 
 import UIKit
+import Foundation
+
+import Foundation
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 class FeedVC: UIViewController {
     
@@ -9,6 +14,16 @@ class FeedVC: UIViewController {
         let btn = UIButton()
         btn.backgroundColor = .primary
         btn.setTitle("Sign Out", for: .normal)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.tintColor = .white
+        
+        return btn
+    }()
+    
+    private let socialCreationButton: UIButton = {
+        let btn = UIButton()
+        btn.backgroundColor = .primary
+        btn.setTitle("Create Event", for: .normal)
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.tintColor = .white
         
@@ -50,19 +65,34 @@ class FeedVC: UIViewController {
         
         
         view.addSubview(signOutButton)
-        signOutButton.center = view.center
-        //NSLayoutConstraint.activate([
-            //signOutButton.center = view.center
-            //signOutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            //signOutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        //])
+        NSLayoutConstraint.activate([
+            signOutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            signOutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+        
+        view.addSubview(socialCreationButton)
+        
+        NSLayoutConstraint.activate([
+            socialCreationButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            socialCreationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            
+        ])
+        
         
         signOutButton.addTarget(self, action: #selector(didTapSignOut(_:)), for: .touchUpInside)
         
+        socialCreationButton.addTarget(self, action: #selector(didTapCreation(_:)), for: .touchUpInside)
+        
     }
     
+    @objc func didTapCreation(_ sender: UIButton) {
+        let vc = SocialCreationVC()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true, completion: nil)
+    }
     
     @objc func didTapSignOut(_ sender: UIButton) {
+        print("tapped")
         SOCAuthManager.shared.signOut {
             guard let window = UIApplication.shared
                     .windows.filter({ $0.isKeyWindow }).first else { return }

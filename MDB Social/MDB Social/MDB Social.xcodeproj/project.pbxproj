@@ -33,6 +33,7 @@
 		1AFB4D88271C2327006621E9 /* FeedNavigationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB4D87271C2327006621E9 /* FeedNavigationVC.swift */; };
 		1AFB4D8A271C23D9006621E9 /* Auth.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1AFB4D89271C23D9006621E9 /* Auth.storyboard */; };
 		E3156D3D2731158A00DB3230 /* TestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3156D3C2731158A00DB3230 /* TestVC.swift */; };
+		E3256C10273DE1A300A10255 /* SocialCreationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3256C0F273DE1A300A10255 /* SocialCreationVC.swift */; };
 		E375A3CB27347ED50007164C /* evenCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E375A3CA27347ED50007164C /* evenCell.swift */; };
 		E3D94160272C559100CA03D5 /* SignupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D9415F272C559100CA03D5 /* SignupVC.swift */; };
 /* End PBXBuildFile section */
@@ -61,6 +62,7 @@
 		1AFB4D87271C2327006621E9 /* FeedNavigationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedNavigationVC.swift; sourceTree = "<group>"; };
 		1AFB4D89271C23D9006621E9 /* Auth.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Auth.storyboard; sourceTree = "<group>"; };
 		E3156D3C2731158A00DB3230 /* TestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestVC.swift; sourceTree = "<group>"; };
+		E3256C0F273DE1A300A10255 /* SocialCreationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialCreationVC.swift; sourceTree = "<group>"; };
 		E375A3CA27347ED50007164C /* evenCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = evenCell.swift; sourceTree = "<group>"; };
 		E3D9415F272C559100CA03D5 /* SignupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -169,6 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				1AFB4D85271C22FD006621E9 /* FeedVC.swift */,
+				E3256C0F273DE1A300A10255 /* SocialCreationVC.swift */,
 				E375A3CA27347ED50007164C /* evenCell.swift */,
 				E3156D3C2731158A00DB3230 /* TestVC.swift */,
 				1AFB4D87271C2327006621E9 /* FeedNavigationVC.swift */,
@@ -261,6 +264,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1ADC5868271250090067693B /* SOCUser.swift in Sources */,
+				E3256C10273DE1A300A10255 /* SocialCreationVC.swift in Sources */,
 				E375A3CB27347ED50007164C /* evenCell.swift in Sources */,
 				1ADC586C271250B50067693B /* SOCAuthManager.swift in Sources */,
 				1ADC587A271255460067693B /* LoadingButton.swift in Sources */,

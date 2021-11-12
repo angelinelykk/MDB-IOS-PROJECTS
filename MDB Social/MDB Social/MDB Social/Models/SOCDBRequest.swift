@@ -7,12 +7,16 @@
 
 import Foundation
 import FirebaseFirestore
+import Firebase
+import UIKit
 
 class FIRDatabaseRequest {
     
     static let shared = FIRDatabaseRequest()
     
     let db = Firestore.firestore()
+    
+    let storage = Storage.storage()
     
     func setUser(_ user: SOCUser, completion: (()->Void)?) {
         guard let uid = user.uid else { return }
@@ -90,4 +94,27 @@ class FIRDatabaseRequest {
         var sortedDate = events.sorted { $0.startDate >= $1.startDate}
         return sortedDate
     }
+    
+    func uploadImage(imageData: Data, name: String, completion: @escaping (URL)->()){
+        let storageRef = storage.reference()
+        let eventRef = storageRef.child("images/" + name + ".jpg")
+        let uploadTask = eventRef.putData(imageData, metadata: nil) { (metadata, error) in
+          guard let metadata = metadata else {
+            // Uh-oh, an error occurred!
+            return
+          }
+          // Metadata contains file metadata such as size, content-type.
+          let size = metadata.size
+          // You can also access to download URL after upload.
+          eventRef.downloadURL { (url, error) in
+            guard let downloadURL = url else {
+              // Uh-oh, an error occurred!
+                print("error url")
+              return
+            }
+            completion(url!)
+          }
+        }
+    }
+    
 }
