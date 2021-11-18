@@ -98,9 +98,12 @@ class FIRDatabaseRequest {
     func uploadImage(imageData: Data, name: String, completion: @escaping (URL)->()){
         let storageRef = storage.reference()
         let eventRef = storageRef.child("images/" + name + ".jpg")
-        let uploadTask = eventRef.putData(imageData, metadata: nil) { (metadata, error) in
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+        let uploadTask = eventRef.putData(imageData, metadata: metadata) { (metadata, error) in
           guard let metadata = metadata else {
-            // Uh-oh, an error occurred!
+              print("metadata not retrieved")
+              print(error)
             return
           }
           // Metadata contains file metadata such as size, content-type.

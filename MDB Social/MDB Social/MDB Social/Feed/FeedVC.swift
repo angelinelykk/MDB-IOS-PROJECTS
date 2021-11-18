@@ -62,6 +62,7 @@ class FeedVC: UIViewController {
         
         view.addSubview((collectionView))
         collectionView.dataSource = self
+        collectionView.delegate = self
         
         
         view.addSubview(signOutButton)
@@ -117,5 +118,15 @@ extension FeedVC: UICollectionViewDataSource {
         cell.url = URL(string: events[indexPath.item].photoURL)
         cell.name = "Event: " + currentEvent.name  +  "\n RSVP: " +  String(currentEvent.rsvpUsers.count)
         return cell
+    }
+    
+}
+
+extension FeedVC: UICollectionViewDelegate {
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let tappedCell = collectionView.cellForItem(at: indexPath) as! eventCell
+        let vc = IndividualVC(givenEvent: events[indexPath.item])
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated:false, completion: nil)
     }
 }

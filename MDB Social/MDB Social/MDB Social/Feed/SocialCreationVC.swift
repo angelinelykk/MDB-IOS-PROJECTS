@@ -82,6 +82,16 @@ class SocialCreationVC: UIViewController, UIImagePickerControllerDelegate, UINav
         return btn
     }()
     
+    private let returnButton: UIButton = {
+        let btn = UIButton()
+        btn.backgroundColor = .primary
+        btn.setTitle("Return", for: .normal)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.tintColor = .white
+        
+        return btn
+    }()
+    
     private let imagePicker: UIImagePickerController = {
         let ip = UIImagePickerController()
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.photoLibrary){
@@ -98,12 +108,11 @@ class SocialCreationVC: UIViewController, UIImagePickerControllerDelegate, UINav
         self.eventImage = image
         let imageName = UUID().uuidString
         
-        if let jpegData = image.jpegData(compressionQuality: 0.1) {
+        if let jpegData = image.jpegData(compressionQuality: 0.001) {
             ImageData = jpegData
+        }
 
-            }
-
-            dismiss(animated: true)
+        dismiss(animated: true)
 
     }
     
@@ -174,16 +183,20 @@ class SocialCreationVC: UIViewController, UIImagePickerControllerDelegate, UINav
         print("tapped")
         eventName = nameTextField.text
         eventDescription = descriptionTextField.text
+        let myTimeStamp = Timestamp(date: self.startDate!)
         FIRDatabaseRequest.shared.uploadImage(imageData: ImageData!, name: eventName!, completion: {url in
             self.ImageURL = url
             print(url)
             print("help")
             
-            let myTimeStamp = Timestamp(date: self.startDate!)
             
             let newEvent = SOCEvent(name: self.eventName!, description: self.eventDescription!, photoURL: self.ImageURL!.absoluteString, startTimeStamp: myTimeStamp, creator: (SOCAuthManager.shared.currentUser?.uid)!, rsvpUsers: [])
             FIRDatabaseRequest.shared.setEvent(newEvent, completion: nil)
         })
+    }
+    
+    @objc func didTapReturn(_ sender: UIButton) {
+        dismiss(animated: true, completion: nil)
     }
     
     //viewDidLoad
@@ -239,9 +252,18 @@ class SocialCreationVC: UIViewController, UIImagePickerControllerDelegate, UINav
         view.addSubview(createButton)
         
         NSLayoutConstraint.activate([
-            createButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            createButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -(view.bounds.width/4)),
             createButton.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.bounds.height/8 * 7)
         ])
+        
+        view.addSubview(returnButton)
+        
+        NSLayoutConstraint.activate([
+            returnButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: view.bounds.width/4),
+            returnButton.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.bounds.height/8 * 7)
+        ])
+        returnButton.addTarget(self, action: #selector(didTapReturn(_:)), for: .touchUpInside)
+        
         
         cameraButton.addTarget(self, action: #selector(didTapCamera(_:)), for: .touchUpInside)
         libraryButton.addTarget(self, action: #selector(didTapLibrary(_:)), for: .touchUpInside)
