@@ -120,4 +120,16 @@ class FIRDatabaseRequest {
         }
     }
     
+    func deleteEvent(_ event: SOCEvent) {
+        guard let id = event.id else { return }
+        
+        db.collection("events").document(id).delete() { err in
+            if let err = err {
+                print("Error removing document: \(err)")
+            } else {
+                print("Document successfully removed!")
+            }
+        }
+    }
+    
 }

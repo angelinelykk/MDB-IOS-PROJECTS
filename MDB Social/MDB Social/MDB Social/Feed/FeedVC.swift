@@ -8,6 +8,8 @@ import FirebaseFirestoreSwift
 
 class FeedVC: UIViewController {
     
+    static var shared = FeedVC()
+    
     var events: [SOCEvent] = []
     
     private let signOutButton: UIButton = {

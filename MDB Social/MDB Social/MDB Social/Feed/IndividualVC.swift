@@ -151,7 +151,8 @@ class IndividualVC: UIViewController {
         view.addSubview(rsvpLabel)
         view.addSubview(returnButton)
         view.addSubview(rsvpButton)
-        
+        print(event!.creator)
+        print(SOCAuthManager.shared.currentUser!.uid)
         if (event!.creator == SOCAuthManager.shared.currentUser!.uid) {
             view.addSubview(deleteButton)
             NSLayoutConstraint.activate([
@@ -164,8 +165,8 @@ class IndividualVC: UIViewController {
             
             view.addSubview(cancelButton)
             NSLayoutConstraint.activate([
-                cancelButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: view.bounds.width/4),
-                cancelButton.centerYAnchor.constraint(equalTo: view.topAnchor, constant: view.bounds.height/8 * 3)
+                cancelButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                cancelButton.topAnchor.constraint(equalTo: view.topAnchor, constant: view.bounds.height/8 * 7)
             ])
         }
         
@@ -192,6 +193,8 @@ class IndividualVC: UIViewController {
         
         returnButton.addTarget(self, action: #selector(didTapReturn(_:)), for: .touchUpInside)
         rsvpButton.addTarget(self, action: #selector(didTapRSVP(_:)), for: .touchUpInside)
+        deleteButton.addTarget(self, action: #selector(didTapDelete(_:)), for: .touchUpInside)
+        cancelButton.addTarget(self, action: #selector(didTapCancel(_:)), for: .touchUpInside)
     }
     
     @objc func didTapReturn(_ sender: UIButton) {
@@ -203,7 +206,26 @@ class IndividualVC: UIViewController {
         event?.rsvpUsers.append((SOCAuthManager.shared.currentUser?.uid)!)
         FIRDatabaseRequest.shared.setEvent(event!, completion: nil)
         self.rsvpLabel.text = "RSVP: " + String(event!.rsvpUsers.count)
-        
+        view.addSubview(cancelButton)
+        NSLayoutConstraint.activate([
+            cancelButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            cancelButton.topAnchor.constraint(equalTo: view.topAnchor, constant: view.bounds.height/8 * 7)
+        ])
+    }
+    
+    @objc func didTapCancel(_ sender: UIButton) {
+        if let index = event?.rsvpUsers.firstIndex(of: (SOCAuthManager.shared.currentUser?.uid)!) {
+            event?.rsvpUsers.remove(at: index)
+        }
+        FIRDatabaseRequest.shared.setEvent(event!, completion: nil)
+        self.rsvpLabel.text = "RSVP: " + String(event!.rsvpUsers.count)
+        cancelButton.removeFromSuperview()
+    }
+    
+    @objc func didTapDelete(_ sender: UIButton) {
+        dismiss(animated: true, completion: nil)
+        FIRDatabaseRequest.shared.deleteEvent(event!)
+        FeedVC.shared.collectionView.reloadData()
     }
     
     func setImageView() {
